@@ -1,43 +1,98 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#123b32">
-  <meta name="description" content="Share your experiences and ideas to help improve live music across Prince Edward Island.">
-  <title>Anonymous Live Event Questionnaire | PEI</title>
-  <style>
-    :root{color-scheme:light;--green:#176b4b;--navy:#17364a;--cream:#f5f7f2;--ink:#18313b;--muted:#53656a}
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100svh;background:var(--cream);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column}
-    header{background:var(--navy);color:white;padding:clamp(1rem,4vw,2rem) 1.25rem;text-align:center}
-    header p{margin:.35rem 0 0;color:#e0e9e5}
-    main{width:min(100% - 2rem,42rem);margin:auto;padding:2rem 0;flex:1;display:grid;place-items:center}
-    .panel{width:100%;background:white;border:2px solid #d9e3dc;border-radius:1.25rem;padding:clamp(1.5rem,5vw,3rem);text-align:center;box-shadow:0 8px 24px #17364a12}
-    .mark{width:4rem;height:4rem;margin:0 auto 1rem;border-radius:50%;display:grid;place-items:center;background:#e5f1e8;color:var(--green);font-size:2rem}
-    h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.15;margin:.25rem 0 1rem;color:var(--navy)}
-    .lead{font-size:1.15rem;color:var(--muted);max-width:32rem;margin:0 auto 1.5rem}
-    .note{font-size:.95rem;color:var(--muted);margin:1.25rem 0}
-    button{border:0;border-radius:.8rem;background:var(--green);color:white;font:700 1.05rem system-ui;padding:1rem 2rem;min-height:3.5rem;cursor:pointer}
-    button:focus-visible{outline:3px solid #d49b35;outline-offset:3px}
-    footer{text-align:center;padding:1rem;color:var(--muted);font-size:.85rem}
-  </style>
-</head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#17364a">
+<meta name="description" content="Share your experiences and ideas to help improve live music across Prince Edward Island.">
+<title>Anonymous Live Event Questionnaire — PEI</title>
+<style>
+:root{--green:#176b4b;--green2:#e7f2e9;--navy:#17364a;--ink:#1c3038;--muted:#53656a;--paper:#f5f7f2;--line:#d8e2da;--gold:#d49b35}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;background:var(--paper);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column}
+header{background:var(--navy);color:white;padding:13px 20px 12px;text-align:center;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;inset:auto -5% -40px;height:65px;border-radius:50%;background:#ffffff0c}
+.brand{font-size:.78rem;letter-spacing:.13em;font-weight:800}.subbrand{font-size:.82rem;color:#e0e9e5;margin-top:2px}
+main{width:min(100% - 24px,680px);margin:22px auto 16px;flex:1;display:flex;flex-direction:column}
+.progress-wrap{margin:0 4px 14px}.progress-meta{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-bottom:7px;font-weight:650}
+.track{height:9px;background:#dce5dc;border-radius:99px;overflow:hidden}.fill{height:100%;width:10%;background:var(--green);border-radius:99px;transition:width .2s}
+.panel{background:white;border:1.5px solid var(--line);border-radius:20px;padding:clamp(20px,5vw,34px);box-shadow:0 8px 26px #17364a0d;flex:1;display:flex;flex-direction:column;min-height:500px}
+.topline{display:flex;align-items:center;gap:10px;color:var(--green);font-size:.8rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase}
+.lighthouse{width:36px;height:36px;flex:none}
+h1{font-size:clamp(1.5rem,5vw,2.05rem);line-height:1.18;color:var(--navy);margin:16px 0 9px}
+.help{color:var(--muted);margin:0 0 20px}
+.answers{display:flex;flex-direction:column;gap:10px;flex:1;justify-content:center}
+.choice{position:relative;display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;min-height:54px;cursor:pointer;text-align:left;font:600 1rem system-ui;color:var(--ink);background:#fff}
+.choice input{accent-color:var(--green);width:19px;height:19px;flex:none;margin:0}
+.choice:has(input:checked){border-color:var(--green);background:var(--green2);box-shadow:inset 0 0 0 1px var(--green)}
+.choice:focus-within{outline:3px solid #d49b3555;outline-offset:2px}
+.field{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font:inherit;margin:4px 0 12px;background:white;color:var(--ink)}
+textarea.field{resize:vertical;min-height:115px}.field:focus{outline:3px solid #176b4b25;border-color:var(--green)}
+.field-label{display:block;text-align:left;font-weight:700;color:var(--navy);margin:12px 0 2px}
+.actions{display:flex;gap:12px;margin-top:22px}.actions button{flex:1;min-height:52px;border-radius:12px;border:0;font:750 1rem system-ui;cursor:pointer}
+.back{background:#edf1ed;color:var(--navy)}.next{background:var(--green);color:white}.next:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.small{font-size:.82rem;color:var(--muted);margin:12px 0 0}.error{color:#9b2c2c;font-weight:650;min-height:1.4em;margin-top:8px}
+footer{text-align:center;padding:0 16px 16px;color:var(--muted);font-size:.82rem}
+.hidden{display:none!important}.intro{text-align:center;justify-content:center}.intro h1{margin-top:18px}.intro .help{font-size:1.1rem;max-width:480px;margin:0 auto 18px}.intro .next{flex:none;padding:0 28px}
+@media(max-height:760px){main{margin-top:12px}.panel{min-height:440px;padding:18px 22px}h1{margin:10px 0 6px}.help{margin-bottom:12px}.choice{min-height:46px;padding:9px 12px}.actions{margin-top:14px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head>
 <body>
-  <header>
-    <strong>PRINCE EDWARD ISLAND</strong>
-    <p>Live music community questionnaire</p>
-  </header>
-  <main>
-    <section class="panel" aria-labelledby="title">
-      <div class="mark" aria-hidden="true">✦</div>
-      <h1 id="title">Anonymous Live Event Questionnaire</h1>
-      <p class="lead">Help improve the live music scene on PEI.</p>
-      <p>Share your experiences and ideas. Help make live music better for everyone across Prince Edward Island.</p>
-      <p class="note">Participation is voluntary. You can take part without providing your name or contact details. This questionnaire is being prepared and is not yet collecting responses.</p>
-      <button type="button" disabled aria-disabled="true">Questionnaire coming soon</button>
-    </section>
-  </main>
-  <footer>Created by Griffen Arsenault</footer>
-</body>
-</html>
+<header><div class="brand">PRINCE EDWARD ISLAND</div><div class="subbrand">Live music community questionnaire</div></header>
+<main>
+<div class="progress-wrap" id="progressWrap"><div class="progress-meta"><span id="stepLabel">Step 1 of 10</span><span id="percent">10%</span></div><div class="track" role="progressbar" aria-label="Questionnaire progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="10" id="track"><div class="fill" id="fill"></div></div></div>
+<section class="panel intro" id="intro">
+<div class="topline" style="justify-content:center"><svg class="lighthouse" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 43h14l-3-27h-8z" fill="#176b4b"/><path d="M19 16h10l-2-6h-6zM20 8h8V4h-8z" fill="#d49b35"/><path d="M16 44h16M12 46h24" stroke="#17364a" stroke-width="2" stroke-linecap="round"/><path d="M24 2V0M18 5l-3-3M30 5l3-3" stroke="#d49b35" stroke-width="2"/></svg> PEI voices matter</div>
+<h1>Anonymous Live Event Questionnaire</h1><p class="help">Help improve the live music scene on PEI.</p>
+<p>Share your experiences and ideas. Help make live music better for everyone across Prince Edward Island.</p>
+<p class="small">About 3 minutes · No account required · Contact details are optional</p>
+<p class="small"><strong>Preview:</strong> This questionnaire is being built. Your answers stay in this browser session and are not sent or saved anywhere.</p>
+<button class="next" id="start">Preview questionnaire</button>
+</section>
+<section class="panel hidden" id="survey" aria-live="polite">
+<div class="topline"><svg class="lighthouse" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 43h14l-3-27h-8z" fill="#176b4b"/><path d="M19 16h10l-2-6h-6zM20 8h8V4h-8z" fill="#d49b35"/><path d="M16 44h16M12 46h24" stroke="#17364a" stroke-width="2" stroke-linecap="round"/></svg><span>PEI live music questionnaire</span></div>
+<h1 id="question"></h1><p class="help" id="help"></p><div id="answers" class="answers"></div><div class="error" id="error" role="alert"></div>
+<div class="actions"><button class="back" id="back" type="button">Back</button><button class="next" id="next" type="button">Next</button></div>
+</section>
+<section class="panel intro hidden" id="finish"><div class="topline" style="justify-content:center">Preview complete</div><h1>Thanks for reviewing the questionnaire.</h1><p class="help">This was a preview only. Your answers were not submitted, stored, or transmitted.</p><p>Once secure response storage and the privacy notice are in place, the questionnaire can be opened for public participation.</p><button class="next" id="restart">Start preview again</button></section>
+</main>
+<footer>Created by Griffen Arsenault</footer>
+<script>
+const steps=[
+{q:"Optional contact information",help:"You can leave everything blank and continue anonymously.",type:"contact"},
+{q:"Which roles describe you in PEI's live music community?",help:"Select all that apply.",type:"multi",opts:["Musician / Performer","Venue Owner / Manager","Sound / Lighting Technician","Promoter / Event Organizer","Venue Staff / Security","Audience Member / Fan","Other"]},
+{q:"How many live music events do you attend in a typical month on PEI?",type:"single",opts:["None","1","2","3","4","5 or more"]},
+{q:"How many live music events do you work at in a typical month on PEI?",help:"This question is for people who work in live music. Audience-only respondents can skip it.",type:"work",opts:["None","1","2","3","4","5 or more"]},
+{q:"How satisfied are you with the music industry on PEI?",type:"single",opts:["Awesome","Great","Good","Bad","Awful"]},
+{q:"What are the biggest challenges facing live music on PEI?",help:"Choose up to 3.",type:"multi3",opts:["Scheduling & availability","Sound / technical issues","Equipment & resources","Promotion & audience reach","Communication & coordination","Costs & budgets","Other"]},
+{q:"How well are musical events organized on PEI?",type:"single",opts:["Awesome","Great","Good","Bad","Awful","Not sure"]},
+{q:"How do you currently connect with PEI's live music community?",help:"Select all that apply.",type:"multi",opts:["Social media","Messaging apps","Through venues","Friends / other musicians","Websites / online platforms","Other","Prefer not to say"]},
+{q:"How much room is there to improve live music on PEI?",type:"single",opts:["A great deal","Some","A little","None","Not sure"]},
+{q:"Any ideas or complaints?",help:"Optional. Share anything else you think would help (500 characters maximum).",type:"text"}
+];
+const workRoles=["Musician / Performer","Venue Owner / Manager","Sound / Lighting Technician","Promoter / Event Organizer","Venue Staff / Security"];
+let index=0,answers={};
+const $=id=>document.getElementById(id);
+function selected(name){return [...document.querySelectorAll('[name="'+name+'"]:checked')].map(x=>x.value)}
+function render(){
+const s=steps[index];$("question").textContent=s.q;$("help").textContent=s.help||"";$("answers").innerHTML="";$("error").textContent="";
+$("stepLabel").textContent="Step "+(index+1)+" of 10";$("percent").textContent=((index+1)*10)+"%";$("fill").style.width=((index+1)*10)+"%";$("track").setAttribute("aria-valuenow",(index+1)*10);
+$("back").style.visibility=index===0?"hidden":"visible";$("next").textContent=index===9?"Finish preview":"Next";
+if(s.type==="contact"){
+$("answers").innerHTML='<label class="field-label" for="contactName">Name (optional)</label><input class="field" id="contactName" autocomplete="name" maxlength="100" placeholder="Your name"><label class="field-label" for="contactEmail">Email (optional)</label><input class="field" id="contactEmail" type="email" autocomplete="email" maxlength="160" placeholder="you@example.com"><label class="field-label" for="contactPhone">Phone (optional)</label><input class="field" id="contactPhone" type="tel" autocomplete="tel" maxlength="40" placeholder="Phone number"><p class="small">Only provide contact details if you want someone to follow up. They are not required.</p>';
+for(const [id,key] of [["contactName","name"],["contactEmail","email"],["contactPhone","phone"]])$(id).value=answers[key]||"";
+}else if(s.type==="text"){
+const t=document.createElement("textarea");t.className="field";t.id="freeText";t.maxLength=500;t.placeholder="Your ideas or feedback…";t.value=answers[index]||"";$("answers").append(t);const n=document.createElement("div");n.className="small";n.id="count";n.textContent=t.value.length+"/500";t.addEventListener("input",()=>n.textContent=t.value.length+"/500");$("answers").append(n);
+}else{
+let opts=s.opts;
+if(s.type==="work"&&!workRoles.some(r=>(answers[1]||[]).includes(r))){$("help").textContent="Based on your role selection, this question does not apply. Continue to the next question.";opts=["Skip — not applicable"];}
+const multi=s.type==="multi"||s.type==="multi3";const current=answers[index]||[];
+opts.forEach((v,i)=>{const label=document.createElement("label");label.className="choice";const input=document.createElement("input");input.type=multi?"checkbox":"radio";input.name="answer";input.value=v;input.checked=multi?current.includes(v):current===v;input.addEventListener("change",()=>{if(s.type==="multi3"&&selected("answer").length>3){input.checked=false;$("error").textContent="Please choose no more than 3.";return;}if(s.type==="work"&&v.startsWith("Skip"))answers[index]="Skip — not applicable";else answers[index]=multi?selected("answer"):v;});label.append(input,document.createTextNode(v));$("answers").append(label);});
+}
+}
+function saveCurrent(){const s=steps[index];if(s.type==="contact"){answers.name=$("contactName").value.trim();answers.email=$("contactEmail").value.trim();answers.phone=$("contactPhone").value.trim();}if(s.type==="text")answers[index]=$("freeText").value.trim();}
+function canContinue(){const s=steps[index];if(s.type==="contact"||s.type==="text")return true;if(s.type==="work"&&!workRoles.some(r=>(answers[1]||[]).includes(r)))return true;const v=answers[index];return Array.isArray(v)?v.length>0:!!v;}
+$("start").addEventListener("click",()=>{$("intro").classList.add("hidden");$("progressWrap").classList.remove("hidden");$("survey").classList.remove("hidden");render();});
+$("back").addEventListener("click",()=>{saveCurrent();if(index>0){index--;render();}});
+$("next").addEventListener("click",()=>{saveCurrent();if(!canContinue()){$("error").textContent="Please select an answer, or go back and review.";return;}if(index<9){index++;render();}else{$("survey").classList.add("hidden");$("progressWrap").classList.add("hidden");$("finish").classList.remove("hidden");}});
+$("restart").addEventListener("click",()=>{index=0;answers={};$("finish").classList.add("hidden");$("intro").classList.remove("hidden");});
+$("progressWrap").classList.add("hidden");
+</script></body></html>
