@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#17364a">
 <meta name="description" content="Share your experiences and ideas to help improve live music across Prince Edward Island.">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <title>Anonymous Live Event Questionnaire — PEI</title>
 <style>
 :root{--green:#176b4b;--green2:#e7f2e9;--navy:#17364a;--ink:#1c3038;--muted:#53656a;--paper:#f5f7f2;--line:#d8e2da;--gold:#d49b35}
@@ -52,7 +53,7 @@ footer{text-align:center;padding:0 16px 16px;color:var(--muted);font-size:.82rem
 <h1 id="question"></h1><p class="help" id="help"></p><div id="answers" class="answers"></div><div class="error" id="error" role="alert"></div>
 <div class="actions"><button class="back" id="back" type="button">Back</button><button class="next" id="next" type="button">Next</button></div>
 </section>
-<section class="panel intro hidden" id="finish"><div class="topline" style="justify-content:center">Preview complete</div><h1>Thanks for reviewing the questionnaire.</h1><p class="help">This was a preview only. Your answers were not submitted, stored, or transmitted.</p><p>Once secure response storage and the privacy notice are in place, the questionnaire can be opened for public participation.</p><button class="next" id="restart">Start preview again</button></section>
+<section class="panel intro hidden" id="finish"><div class="topline" style="justify-content:center">One last step</div><h1>Thank you for sharing your experience.</h1><p class="help">Complete the security check, then submit your questionnaire.</p><div id="turnstile-widget" style="display:flex;justify-content:center;margin:18px 0"></div><p class="small" id="submitStatus" role="status">Your answers will be sent securely to the questionnaire database.</p><button class="next" id="submit" disabled>Complete security check first</button><button class="back" id="restart" style="margin-top:12px">Review answers</button></section>
 </main>
 <footer>Created by Griffen Arsenault</footer>
 <script>
@@ -69,7 +70,7 @@ const steps=[
 {q:"Any ideas or complaints?",help:"Optional. Share anything else you think would help (500 characters maximum).",type:"text"}
 ];
 const workRoles=["Musician / Performer","Venue Owner / Manager","Sound / Lighting Technician","Promoter / Event Organizer","Venue Staff / Security"];
-let index=0,answers={};
+let index=0,answers={},turnstileToken="",turnstileWidgetId=null;
 const $=id=>document.getElementById(id);
 function selected(name){return [...document.querySelectorAll('[name="'+name+'"]:checked')].map(x=>x.value)}
 function render(){
@@ -92,7 +93,50 @@ function saveCurrent(){const s=steps[index];if(s.type==="contact"){answers.name=
 function canContinue(){const s=steps[index];if(s.type==="contact"||s.type==="text")return true;if(s.type==="work"&&!workRoles.some(r=>(answers[1]||[]).includes(r)))return true;const v=answers[index];return Array.isArray(v)?v.length>0:!!v;}
 $("start").addEventListener("click",()=>{$("intro").classList.add("hidden");$("progressWrap").classList.remove("hidden");$("survey").classList.remove("hidden");render();});
 $("back").addEventListener("click",()=>{saveCurrent();if(index>0){index--;render();}});
-$("next").addEventListener("click",()=>{saveCurrent();if(!canContinue()){$("error").textContent="Please select an answer, or go back and review.";return;}if(index<9){index++;render();}else{$("survey").classList.add("hidden");$("progressWrap").classList.add("hidden");$("finish").classList.remove("hidden");}});
-$("restart").addEventListener("click",()=>{index=0;answers={};$("finish").classList.add("hidden");$("intro").classList.remove("hidden");});
+$("next").addEventListener("click",()=>{saveCurrent();if(!canContinue()){$("error").textContent="Please select an answer, or go back and review.";return;}if(index<9){index++;render();}else{$("survey").classList.add("hidden");$("progressWrap").classList.add("hidden");$("finish").classList.remove("hidden");initializeTurnstile();}});
+function initializeTurnstile(){
+  $("submit").disabled=true;$("submit").textContent="Complete security check first";
+  $("submitStatus").textContent="Complete the security check to submit.";
+  const renderWidget=()=>{if(!window.turnstile||turnstileWidgetId!==null)return;
+    turnstileWidgetId=window.turnstile.render("#turnstile-widget",{
+      sitekey:"0x4AAAAAAF1y3lGgrkquffBH",action:"survey_submit",
+      callback:(token)=>{turnstileToken=token;$("submit").disabled=false;$("submit").textContent="Submit questionnaire";$("submitStatus").textContent="Security check complete."},
+      "expired-callback":()=>{turnstileToken="";$("submit").disabled=true;$("submit").textContent="Complete security check first";$("submitStatus").textContent="Security check expired. Please complete it again."},
+      "error-callback":()=>{turnstileToken="";$("submit").disabled=true;$("submitStatus").textContent="Security check could not load. Please refresh and try again."}
+    });
+  };
+  const waitForWidget=()=>{if(window.turnstile){renderWidget();}else{setTimeout(waitForWidget,250);}};
+  waitForWidget();
+}
+$("submit").addEventListener("click",async()=>{
+  if(!turnstileToken)return;
+  $("submit").disabled=true;$("submit").textContent="Submitting…";$("submitStatus").textContent="Sending your response securely…";
+  const payload={
+    respondent_roles:answers[1]||[],
+    attendance_count:answers[2],
+    work_count:(answers[1]||[]).some(r=>r!=="Audience Member / Fan")?(answers[3]==="Skip — not applicable"?null:answers[3]):null,
+    satisfaction:answers[4],
+    challenges:answers[5]||[],
+    organization_rating:answers[6],
+    connection_methods:answers[7]||[],
+    improvement_potential:answers[8],
+    additional_feedback:answers[9]||"",
+    contact:{name:answers.name||"",email:answers.email||"",phone:answers.phone||""},
+    turnstile_token:turnstileToken
+  };
+  try{
+    const response=await fetch("https://ygcshhnmvacefoedidilc.supabase.co/functions/v1/rapid-task",{
+      method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)
+    });
+    const result=await response.json();
+    if(!response.ok||result.success!==true)throw new Error(result.error||"Submission failed.");
+    $("finish").innerHTML='<div class="topline" style="justify-content:center">Submission received</div><h1>Thank you!</h1><p class="help">Your response has been received.</p><p>Your contribution will help us better understand live music across Prince Edward Island.</p>';
+  }catch(error){
+    $("submitStatus").textContent=error.message||"We couldn't submit your response. Please try again.";
+    $("submit").disabled=false;$("submit").textContent="Try submission again";
+    if(window.turnstile&&turnstileWidgetId!==null){window.turnstile.reset(turnstileWidgetId);turnstileToken="";$("submit").disabled=true;$("submit").textContent="Complete security check first";}
+  }
+});
+$("restart").addEventListener("click",()=>{if(window.turnstile&&turnstileWidgetId!==null)window.turnstile.remove(turnstileWidgetId);turnstileWidgetId=null;turnstileToken="";index=0;answers={};$("finish").classList.add("hidden");$("intro").classList.remove("hidden");});
 $("progressWrap").classList.add("hidden");
 </script></body></html>
