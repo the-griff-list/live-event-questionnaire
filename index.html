@@ -138,6 +138,6 @@ $("submit").addEventListener("click",async()=>{
     if(window.turnstile&&turnstileWidgetId!==null){window.turnstile.reset(turnstileWidgetId);turnstileToken="";$("submit").disabled=true;$("submit").textContent="Complete security check first";}
   }
 });
-$("restart").addEventListener("click",()=>{if(window.turnstile&&turnstileWidgetId!==null)window.turnstile.remove(turnstileWidgetId);turnstileWidgetId=null;turnstileToken="";index=0;answers={};$("finish").classList.add("hidden");$("intro").classList.remove("hidden");});
+$("restart").addEventListener("click",()=>{if(window.turnstile&&turnstileWidgetId!==null)window.turnstile.remove(turnstileWidgetId);turnstileWidgetId=null;turnstileToken="";$("finish").classList.add("hidden");$("progressWrap").classList.remove("hidden");$("survey").classList.remove("hidden");index=9;render();});
 $("progressWrap").classList.add("hidden");
 </script></body></html>
