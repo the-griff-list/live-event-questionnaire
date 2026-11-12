@@ -45,8 +45,9 @@ footer{text-align:center;padding:0 16px 16px;color:var(--muted);font-size:.82rem
 <h1>Anonymous Live Event Questionnaire</h1><p class="help">Help improve the live music scene on PEI.</p>
 <p>Share your experiences and ideas. Help make live music better for everyone across Prince Edward Island.</p>
 <p class="small">About 3 minutes · No account required · Contact details are optional</p>
-<p class="small"><strong>Preview:</strong> This questionnaire is being built. Your answers stay in this browser session and are not sent or saved anywhere.</p>
-<button class="next" id="start">Preview questionnaire</button>
+<p class="small">Your answers are submitted securely and stored for analysis. If you provide contact details, they are stored separately from your survey answers.</p>
+<p class="small">A Cloudflare security check helps prevent automated spam. Cloudflare may process technical and browser information to verify that check.</p>
+<button class="next" id="start">Start questionnaire</button>
 </section>
 <section class="panel hidden" id="survey" aria-live="polite">
 <div class="topline"><svg class="lighthouse" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 43h14l-3-27h-8z" fill="#176b4b"/><path d="M19 16h10l-2-6h-6zM20 8h8V4h-8z" fill="#d49b35"/><path d="M16 44h16M12 46h24" stroke="#17364a" stroke-width="2" stroke-linecap="round"/></svg><span>PEI live music questionnaire</span></div>
@@ -76,7 +77,7 @@ function selected(name){return [...document.querySelectorAll('[name="'+name+'"]:
 function render(){
 const s=steps[index];$("question").textContent=s.q;$("help").textContent=s.help||"";$("answers").innerHTML="";$("error").textContent="";
 $("stepLabel").textContent="Step "+(index+1)+" of 10";$("percent").textContent=((index+1)*10)+"%";$("fill").style.width=((index+1)*10)+"%";$("track").setAttribute("aria-valuenow",(index+1)*10);
-$("back").style.visibility=index===0?"hidden":"visible";$("next").textContent=index===9?"Finish preview":"Next";
+$("back").style.visibility=index===0?"hidden":"visible";$("next").textContent=index===9?"Continue to security check":"Next";
 if(s.type==="contact"){
 $("answers").innerHTML='<label class="field-label" for="contactName">Name (optional)</label><input class="field" id="contactName" autocomplete="name" maxlength="100" placeholder="Your name"><label class="field-label" for="contactEmail">Email (optional)</label><input class="field" id="contactEmail" type="email" autocomplete="email" maxlength="160" placeholder="you@example.com"><label class="field-label" for="contactPhone">Phone (optional)</label><input class="field" id="contactPhone" type="tel" autocomplete="tel" maxlength="40" placeholder="Phone number"><p class="small">Only provide contact details if you want someone to follow up. They are not required.</p>';
 for(const [id,key] of [["contactName","name"],["contactEmail","email"],["contactPhone","phone"]])$(id).value=answers[key]||"";
