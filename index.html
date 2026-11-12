@@ -126,7 +126,7 @@ $("submit").addEventListener("click",async()=>{
     turnstile_token:turnstileToken
   };
   try{
-    const response=await fetch("https://ygcshhnmvacefoedidilc.supabase.co/functions/v1/rapid-task",{
+    const response=await fetch("https://ygcshhmvacefoedidilc.supabase.co/functions/v1/rapid-task",{
       method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)
     });
     const result=await response.json();
