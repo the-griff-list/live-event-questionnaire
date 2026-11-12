@@ -69,7 +69,7 @@ const steps=[
 {q:"How much room is there to improve live music on PEI?",type:"single",opts:["A great deal","Some","A little","None","Not sure"]},
 {q:"Any ideas or complaints?",help:"Optional. Share anything else you think would help (500 characters maximum).",type:"text"}
 ];
-const workRoles=["Musician / Performer","Venue Owner / Manager","Sound / Lighting Technician","Promoter / Event Organizer","Venue Staff / Security"];
+const workRoles=["Musician / Performer","Venue Owner / Manager","Sound / Lighting Technician","Promoter / Event Organizer","Venue Staff / Security","Other"];
 let index=0,answers={},turnstileToken="",turnstileWidgetId=null;
 const $=id=>document.getElementById(id);
 function selected(name){return [...document.querySelectorAll('[name="'+name+'"]:checked')].map(x=>x.value)}
